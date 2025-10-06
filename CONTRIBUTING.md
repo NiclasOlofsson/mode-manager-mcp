@@ -4,9 +4,11 @@ Thank you for your interest in contributing to the Mode Manager MCP Server!
 
 ## Development Setup
 
-1. **Install Hatch:**
+1. **Install uv:**
    ```bash
-   pip install hatch
+   # Windows (PowerShell)
+   # See installation options: https://docs.astral.sh/uv/getting-started/installation/
+   pip install uv  # or use the standalone installer
    ```
 
 2. **Clone the repository:**
@@ -16,11 +18,10 @@ Thank you for your interest in contributing to the Mode Manager MCP Server!
    ```
 
 3. **Run tests:**
-   ```bash
-   hatch run test
-   ```
-
-## Development Workflow
+```bash
+uv sync --group dev
+uv run test
+```## Development Workflow
 
 ### Environment Management
 
@@ -30,29 +31,34 @@ Hatch automatically manages virtual environments for you. No need to create or a
 
 ```bash
 # Run all tests
-hatch run test
+uv sync --group dev
+uv run test
 
-# Run tests with coverage
-hatch test --cover
+# Run tests with coverage (pytest - add coverage plugin if needed)
+uv run pytest --cov
 
-# Run tests in all Python versions (if configured)
-hatch test --all
+# Run against multiple Python versions (use matrix in CI or uv python pin locally)
+# e.g., uv run --python 3.10 pytest
 ```
 
 ### Code Quality
 
 ```bash
-# Format code with Black
-hatch run format
+# Format code with Black (project standard)
+uv run pydocstringformatter src tests && uv run black src tests
 
-# Check code formatting
-hatch run lint
+# Check formatting without applying
+uv run black --check src tests
 
-# Run type checking (note: currently has some type annotations to fix)
-hatch run typecheck
+# Alternative: uv format (Ruff-based, experimental)
+uv format                # Apply formatting
+uv format --check       # Check only
+
+# Run type checking
+uv run mypy src tests
 
 # Run all quality checks (pre-commit hooks)
-hatch run precommit
+uv run pre-commit run --all-files
 ```
 
 **Note:** Type checking currently reports some annotation issues that need to be addressed in future contributions.
@@ -61,46 +67,48 @@ hatch run precommit
 
 ```bash
 # Build wheel and source distribution
-hatch build
+uv build
 
 # Build only wheel
-hatch build -t wheel
+uv build --only wheel
 
 # Build only source distribution  
-hatch build -t sdist
+uv build --only sdist
 ```
 
 ### Working with Dependencies
 
 ```bash
-# Show current dependencies
-hatch dep show table
+# Install project dependencies
+uv sync --group dev
 
-# Install in development mode (automatic with hatch run)
-hatch shell  # Enters development environment
+# Enter a shell in the venv (optional)
+source .venv/bin/activate  # bash
+# On Windows PowerShell: .venv\Scripts\Activate.ps1
 ```
 
 ### Available Scripts
 
 The project defines several convenient scripts in `pyproject.toml`:
 
-- `hatch run test` - Run pytest
-- `hatch run lint` - Check code formatting with Black
-- `hatch run typecheck` - Run mypy type checking  
-- `hatch run format` - Format code with Black
-- `hatch run precommit` - Run pre-commit hooks
+- `uv run pytest` - Run pytest
+- `uv format --check` - Check code formatting with Ruff (built-in)
+- `uv run black --check src tests` - Check code formatting with Black
+- `uv run mypy src tests` - Run mypy type checking  
+- `uv format` - Format code with Ruff (built-in)
+- `uv run pre-commit run --all-files` - Run pre-commit hooks
 
 ### Running Individual Commands
 
 ```bash
 # Run any Python command in the environment
-hatch run python -m src.mode_manager_mcp
+uv run python -m src.mode_manager_mcp
 
 # Run the server directly for testing
-hatch run python -m src.mode_manager_mcp --help
+uv run python -m src.mode_manager_mcp --help
 
 # Enter a shell in the development environment
-hatch shell
+source .venv/bin/activate  # or use uv run for commands
 ```
 
 ## Development Environment
@@ -116,14 +124,14 @@ Hatch automatically creates and manages a virtual environment (`.venv`) in your 
 
 | Command | Description |
 |---------|-------------|
-| `hatch run test` | Run all tests with pytest |
-| `hatch run lint` | Check code formatting |
-| `hatch run format` | Auto-format code with Black |
-| `hatch run typecheck` | Run mypy type checking |
-| `hatch build` | Build wheel and source distribution |
-| `hatch shell` | Enter development environment |
-| `hatch env show` | Show environment information |
-| `hatch clean` | Clean build artifacts |
+| `uv run pytest` | Run all tests with pytest |
+| `uv format --check` | Check code formatting (Ruff) |
+| `uv format` | Auto-format code with Ruff |
+| `uv run mypy src tests` | Run mypy type checking |
+| `uv build` | Build wheel and source distribution |
+| `uv run` | Run commands in the project environment |
+| `uv sync` | Sync dependencies (creates .venv) |
+| `uv cache clean` | Clean cache (useful if needed) |
 
 ## Code Style
 

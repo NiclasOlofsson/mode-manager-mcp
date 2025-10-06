@@ -18,21 +18,22 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install Hatch
-        run: pip install --upgrade hatch
+      - uses: astral-sh/setup-uv@v4
       - name: Bump version (patch)
         id: version_bump
         run: |
-          hatch version patch
+          uv version --bump patch
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add src/mode_manager_mcp/__init__.py
-          git commit -m "ci: bump version [skip ci]"
-          git tag v$(hatch version)
+          git add pyproject.toml uv.lock || true
+          git commit -m "ci: bump version [skip ci]" || echo "No changes to commit"
+          git tag v$(uv version --short)
           git push --follow-tags
       - name: Build package
-        run: hatch build
+        run: uv build --no-sources
       - name: Test
-        run: hatch run test
+        run: |
+          uv sync --group dev
+          uv run test
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1

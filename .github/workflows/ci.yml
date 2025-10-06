@@ -14,16 +14,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install Hatch
-        run: pip install --upgrade hatch
-      - name: Install dependencies
-        run: hatch env create
+      - uses: astral-sh/setup-uv@v4
+      - name: Sync dependencies
+        run: uv sync --group dev
       - name: Format
-        run: hatch run format
+        run: uv run pydocstringformatter src tests && uv run black src tests
       - name: Lint
-        run: hatch run lint
+        run: uv run black --check src tests
       - name: Type check
-        run: hatch run typecheck
+        run: uv run mypy src tests
       - name: Test
-        run: hatch run test
+        run: uv run pytest
 

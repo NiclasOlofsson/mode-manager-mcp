@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "mode-manager-mcp"
-dynamic = ["version"]
+version = "0.1.18"
 description = "Mode Manager MCP: Server for managing VS Code .chatmode.md and .instructions.md files (GitHub Copilot prompts)"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -67,28 +67,31 @@ include = ["src/**", "README.md", "LICENSE", "library/**", "test_basic.py"]
 packages = ["src/mode_manager_mcp"]
 
 
-[tool.hatch.envs.default]
-type = "virtual"
-path = ".venv"
-dependencies = [
-    "pytest",
-    "pytest-asyncio",
-    "black",
-    "mypy",
-    "pre-commit",
+[dependency-groups]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.0.0",
+    "mypy>=1.0.0",
+    "pre-commit>=3.0.0",
     "types-psutil",
-    "pydocstringformatter",
+    "types-requests",
+    "pydocstringformatter>=0.4.0",
+    "ruff>=0.13.3",
 ]
-[tool.hatch.envs.default.scripts]
-test = "pytest"
-lint = "black --check src tests"
-typecheck = "mypy src tests"
-format = "pydocstringformatter src tests && black src tests"
-precommit = "pre-commit run --all-files"
+
 
 [tool.black]
 line-length = 250
-target-version = ['py38']
+target-version = ['py310']
+
+[tool.ruff]
+line-length = 250
+target-version = "py310"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
 
 [tool.mypy]
 python_version = "3.10"
@@ -112,8 +115,6 @@ python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
 
-[tool.hatch.version]
-path = "src/mode_manager_mcp/__init__.py"
 
 [tool.pydocstringformatter]
 write = true
