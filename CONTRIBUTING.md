@@ -44,11 +44,11 @@ uv run pytest --cov
 ### Code Quality
 
 ```bash
-# Format code with Ruff (project standard)
-uv run pydocstringformatter src tests && uv run ruff format src tests
+# Format code with Ruff (via uv format)
+uv run pydocstringformatter src tests && uv format
 
 # Check formatting without applying
-uv run ruff format --check src tests
+uv format --check
 
 # Alternative: uv format (Ruff-based, experimental)
 uv format                # Apply formatting

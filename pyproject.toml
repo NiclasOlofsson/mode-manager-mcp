@@ -42,7 +42,6 @@ dependencies = [
 dev = [
     "pytest>=7.0.0",
     "pytest-asyncio>=0.21.0",
-    "ruff>=0.13.3",
     "mypy>=1.0.0",
     "pre-commit>=3.0.0",
     "types-psutil",
@@ -71,7 +70,6 @@ packages = ["src/mode_manager_mcp"]
 dev = [
     "pytest>=7.0.0",
     "pytest-asyncio>=0.21.0",
-    "ruff>=0.13.3",
     "mypy>=1.0.0",
     "pre-commit>=3.0.0",
     "types-psutil",
