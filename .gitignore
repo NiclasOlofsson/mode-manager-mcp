@@ -158,7 +158,8 @@ cython_debug/
 
 .vscode/settings.json
 .vscode/launch.json
-.vscode/extensions.json
+# Track extension recommendations for contributors
+!.vscode/extensions.json
 .vscode/tasks.json
 .vscode/mcp.json
 
