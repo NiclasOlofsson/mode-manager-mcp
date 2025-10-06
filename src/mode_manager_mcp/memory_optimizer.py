@@ -298,7 +298,7 @@ Return ONLY the optimized content (including frontmatter), nothing else:
 
                 # Write optimized content
                 success = write_frontmatter_file(file_path, optimized_frontmatter, optimized_body, create_backup=True)
-                
+
                 # Determine if backup was actually created (skipped for git repos)
                 backup_created = False if _is_in_git_repository(file_path) else success
 
@@ -311,7 +311,7 @@ Return ONLY the optimized content (including frontmatter), nothing else:
                 # AI optimization failed, just update metadata
                 logger.info("AI optimization unavailable, updating metadata only")
                 success = self._update_metadata(file_path, content)
-                
+
                 # Determine if backup was actually created (skipped for git repos)
                 backup_created = False if _is_in_git_repository(file_path) else success
 

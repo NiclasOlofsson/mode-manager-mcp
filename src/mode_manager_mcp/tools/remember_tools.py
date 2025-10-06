@@ -155,7 +155,7 @@ def register_remember_tools() -> None:
 
         # If scope is ambiguous based on memory content, ask for clarification
         if scope_enum == MemoryScope.user and _seems_workspace_specific(memory_item):
-            return f"The memory item '{memory_item}' seems project-specific. " f"Should this be stored as workspace memory instead? " f"Please clarify by calling remember again with scope='{MemoryScope.workspace}' if needed."
+            return f"The memory item '{memory_item}' seems project-specific. Should this be stored as workspace memory instead? Please clarify by calling remember again with scope='{MemoryScope.workspace}' if needed."
 
         try:
             if scope_enum == MemoryScope.user:
@@ -166,7 +166,7 @@ def register_remember_tools() -> None:
             if result["status"] == "success":
                 scope_desc = "workspace" if scope_enum == MemoryScope.workspace else "global"
                 lang_desc = f" for {language}" if language else ""
-                return f"Remembered: {memory_item}\n" f"Stored in {scope_desc} memory{lang_desc}.\n" f"File: {result['filename']}\n" f"This memory will be available to AI assistants when the memory instruction is active in VS Code."
+                return f"Remembered: {memory_item}\nStored in {scope_desc} memory{lang_desc}.\nFile: {result['filename']}\nThis memory will be available to AI assistants when the memory instruction is active in VS Code."
             else:
                 return f"Error: {result.get('message', 'Unknown error occurred')}"
 

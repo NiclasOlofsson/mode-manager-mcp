@@ -145,7 +145,7 @@ def register_library_tools() -> None:
         try:
             result = library_manager.install_from_library(name, filename)
             if result["status"] == "success":
-                return f"{result['message']}\n\n" f"Filename: {result['filename']}\n" f"Source: {result['source_url']}\n" f"Type: {result['type'].title()}\n\n" f"The {result['type']} is now available in VS Code!"
+                return f"{result['message']}\n\nFilename: {result['filename']}\nSource: {result['source_url']}\nType: {result['type'].title()}\n\nThe {result['type']} is now available in VS Code!"
             else:
                 return f"Installation failed: {result.get('message', 'Unknown error')}"
         except FileOperationError as e:

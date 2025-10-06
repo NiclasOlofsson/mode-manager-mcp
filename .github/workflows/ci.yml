@@ -18,9 +18,9 @@ jobs:
       - name: Sync dependencies
         run: uv sync --group dev
       - name: Format
-        run: uv run pydocstringformatter src tests && uv run black src tests
+        run: uv run pydocstringformatter src tests && uv run ruff format src tests
       - name: Lint
-        run: uv run black --check src tests
+        run: uv run ruff format --check src tests
       - name: Type check
         run: uv run mypy src tests
       - name: Test
