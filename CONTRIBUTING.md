@@ -20,19 +20,25 @@ Thank you for your interest in contributing to the Mode Manager MCP Server!
 3. **Run tests:**
 ```bash
 uv sync --group dev
-uv run test
-```## Development Workflow
+uv run pytest
+```
+
+## Development Workflow
 
 ### Environment Management
 
-Hatch automatically manages virtual environments for you. No need to create or activate environments manually.
+uv manages a project-local virtual environment for you:
+
+- Run `uv sync` to create/sync the `.venv` with all dependencies.
+- Use `uv run <command>` to execute tools inside that environment without manually activating it.
+- Optional: activate `.venv` manually if you prefer a shell (`source .venv/bin/activate` on bash, `.venv\Scripts\Activate.ps1` on PowerShell).
 
 ### Running Tests
 
 ```bash
 # Run all tests
 uv sync --group dev
-uv run test
+uv run pytest
 
 # Run tests with coverage (pytest - add coverage plugin if needed)
 uv run pytest --cov
@@ -49,10 +55,6 @@ uv run pydocstringformatter src tests && uv format
 
 # Check formatting without applying
 uv format --check
-
-# Alternative: uv format (Ruff-based, experimental)
-uv format                # Apply formatting
-uv format --check       # Check only
 
 # Run type checking
 uv run mypy src tests
@@ -93,7 +95,6 @@ The project defines several convenient scripts in `pyproject.toml`:
 
 - `uv run pytest` - Run pytest
 - `uv format --check` - Check code formatting with Ruff (built-in)
-- `uv run black --check src tests` - Check code formatting with Black
 - `uv run mypy src tests` - Run mypy type checking  
 - `uv format` - Format code with Ruff (built-in)
 - `uv run pre-commit run --all-files` - Run pre-commit hooks
@@ -113,12 +114,12 @@ source .venv/bin/activate  # or use uv run for commands
 
 ## Development Environment
 
-Hatch automatically creates and manages a virtual environment (`.venv`) in your project directory. This environment:
+uv creates and manages a virtual environment (`.venv`) in your project directory when you run `uv sync`. This environment:
 
-- Is automatically activated when you run `hatch run` commands
+- Is used automatically when you run commands via `uv run`
 - Contains all project dependencies and development tools
-- Is recreated if you delete it or if dependencies change
-- Can be entered manually with `hatch shell`
+- Can be recreated by re-running `uv sync` if dependencies change
+- Can be entered manually if preferred (see Environment Management above)
 
 ## Quick Reference
 
