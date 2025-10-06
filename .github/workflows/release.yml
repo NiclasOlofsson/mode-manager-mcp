@@ -28,6 +28,7 @@ jobs:
           git add pyproject.toml uv.lock || true
           git commit -m "ci: bump version [skip ci]" || echo "No changes to commit"
           git tag v$(uv version --short)
+          git pull --rebase || true
           git push --follow-tags
       - name: Build package
         run: uv build --no-sources
