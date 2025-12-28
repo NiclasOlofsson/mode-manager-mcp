@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "mode-manager-mcp"
-version = "0.1.20"
+version = "0.2.0"
 description = "Mode Manager MCP: Server for managing VS Code .chatmode.md and .instructions.md files (GitHub Copilot prompts)"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -42,7 +42,7 @@ dependencies = [
 dev = [
     "pytest>=7.0.0",
     "pytest-asyncio>=0.21.0",
-    "mypy>=1.0.0",
+    "pyright>=1.1.0",
     "pre-commit>=3.0.0",
     "types-psutil",
     "types-requests",
@@ -70,7 +70,7 @@ packages = ["src/mode_manager_mcp"]
 dev = [
     "pytest>=7.0.0",
     "pytest-asyncio>=0.21.0",
-    "mypy>=1.0.0",
+    "pyright>=1.1.0",
     "pre-commit>=3.0.0",
     "types-psutil",
     "types-requests",
@@ -86,20 +86,16 @@ target-version = "py310"
 quote-style = "double"
 indent-style = "space"
 
-[tool.mypy]
-python_version = "3.10"
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
-check_untyped_defs = true
-disallow_untyped_decorators = true
-no_implicit_optional = true
-warn_redundant_casts = true
-warn_unused_ignores = true
-warn_no_return = true
-warn_unreachable = true
-strict_equality = true
+[tool.pyright]
+pythonVersion = "3.10"
+typeCheckingMode = "strict"
+reportMissingTypeStubs = false
+reportUnknownMemberType = false
+reportUnknownArgumentType = false
+reportUnknownVariableType = false
+reportUnusedFunction = false
+reportUnusedVariable = "warning"
+reportUnnecessaryComparison = false
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

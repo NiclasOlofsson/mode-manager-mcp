@@ -1,19 +1,14 @@
 """Memory and remember tools for persistent AI conversations."""
 
-import datetime
 import logging
 import os
-from pathlib import Path
-from typing import Annotated, Optional
+from typing import Annotated, Any, Dict, Optional
 from urllib.parse import unquote, urlparse
 from urllib.request import url2pathname
 
 from fastmcp import Context
 from fastmcp.prompts.prompt import Message
-from mcp.types import TextContent
-from pydantic import BaseModel
 
-from ..instruction_manager import INSTRUCTION_FILE_EXTENSION
 from ..server_registry import get_server_registry
 from ..types import MemoryScope
 
@@ -45,7 +40,7 @@ def _seems_workspace_specific(memory_item: str) -> bool:
     return any(keyword in memory_item.lower() for keyword in workspace_keywords)
 
 
-async def _create_user_memory(ctx: Context, memory_item: str, language: Optional[str] = None) -> dict:
+async def _create_user_memory(ctx: Context, memory_item: str, language: Optional[str] = None) -> Dict[str, Any]:
     """Create user-level memory (existing behavior with language support)."""
     registry = get_server_registry()
     instruction_manager = registry.instruction_manager
@@ -57,7 +52,7 @@ async def _create_user_memory(ctx: Context, memory_item: str, language: Optional
         return {"status": "error", "message": str(e)}
 
 
-async def _create_workspace_memory(ctx: Context, memory_item: str, language: Optional[str] = None) -> dict:
+async def _create_workspace_memory(ctx: Context, memory_item: str, language: Optional[str] = None) -> Dict[str, Any]:
     """Create workspace-level memory using the context root."""
     registry = get_server_registry()
     instruction_manager = registry.instruction_manager
@@ -178,7 +173,7 @@ def register_remember_tools() -> None:
         description="Direct onboarding instructions for Copilot, including memory file structure.",
         tags={"onboarding", "copilot"},
     )
-    async def onboarding_memory_copilot(ctx: Context) -> list:
+    async def onboarding_memory_copilot(ctx: Context) -> list[Any]:
         # await ctx.info("Direct onboarding instructions for Copilot, including memory file structure.")
         return [
             Message(

@@ -7,7 +7,6 @@ and workspace-specific AI guidance for VS Code Copilot.
 Note: This file has been refactored to eliminate DRY violations.
 """
 
-import json
 import logging
 import os
 from pathlib import Path

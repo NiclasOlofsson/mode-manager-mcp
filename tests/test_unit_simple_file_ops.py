@@ -1,8 +1,6 @@
 """Unit tests for simple_file_ops module."""
 
-import pytest
-
-from mode_manager_mcp.simple_file_ops import FileOperationError, parse_frontmatter
+from mode_manager_mcp.simple_file_ops import parse_frontmatter
 
 
 class TestParseFrontmatter:
@@ -222,12 +220,15 @@ Content.
 
 def test_write_frontmatter_file_glob_patterns() -> None:
     """Test that YAML frontmatter handles glob patterns correctly."""
+    import os
     import tempfile
     from pathlib import Path
 
     from mode_manager_mcp.simple_file_ops import write_frontmatter_file
 
-    temp_file = Path(tempfile.mktemp())
+    fd, temp_path = tempfile.mkstemp(suffix=".md")
+    os.close(fd)
+    temp_file = Path(temp_path)
 
     # Test different glob patterns and quoting behavior
     test_cases = [

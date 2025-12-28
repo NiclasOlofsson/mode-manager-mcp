@@ -10,7 +10,7 @@ import logging
 import re
 import shutil
 from pathlib import Path
-from typing import Any, Dict, Optional, Tuple, Union
+from typing import Any, Dict, Tuple, Union
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,7 @@ class FileOperationError(Exception):
     pass
 
 
-def _is_in_git_repository(file_path: Path) -> bool:
+def is_in_git_repository(file_path: Path) -> bool:
     """
     Check if a file is in a git repository by looking for .git directory.
 
@@ -163,7 +163,7 @@ def write_frontmatter_file(
         file_path = Path(file_path)
 
         # Skip backup if file is in a git repository (git provides version control)
-        is_git_repo = _is_in_git_repository(file_path) if file_path.exists() else False
+        is_git_repo = is_in_git_repository(file_path) if file_path.exists() else False
         should_create_backup = create_backup and file_path.exists() and not is_git_repo
 
         logger.debug(f"Backup decision for {file_path}: create_backup={create_backup}, exists={file_path.exists()}, is_git_repo={is_git_repo}, should_create_backup={should_create_backup}")
@@ -250,7 +250,7 @@ def write_file_with_backup(file_path: Union[str, Path], content: str, create_bac
         file_path = Path(file_path)
 
         # Skip backup if file is in a git repository (git provides version control)
-        should_create_backup = create_backup and file_path.exists() and not _is_in_git_repository(file_path)
+        should_create_backup = create_backup and file_path.exists() and not is_in_git_repository(file_path)
 
         if should_create_backup:
             import datetime
@@ -260,7 +260,7 @@ def write_file_with_backup(file_path: Union[str, Path], content: str, create_bac
 
             shutil.copy2(file_path, backup_path)
             logger.info(f"Created backup before write: {backup_path}")
-        elif file_path.exists() and _is_in_git_repository(file_path):
+        elif file_path.exists() and is_in_git_repository(file_path):
             logger.debug(f"Skipping backup for git-tracked file: {file_path}")
 
         # Ensure parent directory exists
@@ -299,7 +299,7 @@ def safe_delete_file(file_path: Union[str, Path], create_backup: bool = True) ->
 
     try:
         # Skip backup if file is in a git repository (git provides version control)
-        should_create_backup = create_backup and not _is_in_git_repository(file_path)
+        should_create_backup = create_backup and not is_in_git_repository(file_path)
 
         if should_create_backup:
             # Create backup with timestamp
@@ -310,7 +310,7 @@ def safe_delete_file(file_path: Union[str, Path], create_backup: bool = True) ->
 
             shutil.copy2(file_path, backup_path)
             logger.info(f"Created backup: {backup_path}")
-        elif _is_in_git_repository(file_path):
+        elif is_in_git_repository(file_path):
             logger.debug(f"Skipping backup for git-tracked file before deletion: {file_path}")
 
         # Delete the file

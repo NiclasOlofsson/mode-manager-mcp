@@ -25,10 +25,3 @@ async def test_remember_workspace_memory_integration(server: ModeManagerServer) 
         # Since list_roots is not supported in test environment, expect error message
         assert "couldn't find the workspace root" in result.data
         assert "Workspace memory requires access to the current workspace context" in result.data
-
-
-@pytest.mark.asyncio
-async def test_browse_library_integration(server: ModeManagerServer) -> None:
-    async with Client(server.app) as client:
-        result = await client.call_tool("browse_mode_library")
-        assert "Library" in result.data or "Library" in str(result)

@@ -1,6 +1,5 @@
 """Test memory isolation to ensure tests don't write to real directories."""
 
-import os
 from pathlib import Path
 
 import pytest

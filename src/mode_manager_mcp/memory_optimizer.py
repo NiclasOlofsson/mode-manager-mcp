@@ -14,13 +14,11 @@ from typing import Any, Dict, Optional, Tuple
 from fastmcp import Context
 
 from .simple_file_ops import (
-    FileOperationError,
-    _is_in_git_repository,
+    is_in_git_repository,
     parse_frontmatter,
     parse_frontmatter_file,
     write_frontmatter_file,
 )
-from .types import MemoryScope
 
 logger = logging.getLogger(__name__)
 
@@ -260,7 +258,7 @@ Return ONLY the optimized content (including frontmatter), nothing else:
 
             # Read current content
             frontmatter, content = parse_frontmatter_file(file_path)
-            full_content = f"---\n"
+            full_content = "---\n"
             for key, value in frontmatter.items():
                 if isinstance(value, str) and ('"' in value or "'" in value):
                     full_content += f'{key}: "{value}"\n'
@@ -300,10 +298,10 @@ Return ONLY the optimized content (including frontmatter), nothing else:
                 success = write_frontmatter_file(file_path, optimized_frontmatter, optimized_body, create_backup=True)
 
                 # Determine if backup was actually created (skipped for git repos)
-                backup_created = False if _is_in_git_repository(file_path) else success
+                backup_created = False if is_in_git_repository(file_path) else success
 
                 if success:
-                    logger.info(f"Memory optimization completed successfully")
+                    logger.info("Memory optimization completed successfully")
                     return {"status": "optimized", "reason": reason, "method": "ai", "entries_before": metadata.get("entryCount", 0), "entries_after": entry_count, "backup_created": backup_created}
                 else:
                     return {"status": "error", "reason": "Failed to write optimized content"}
@@ -313,7 +311,7 @@ Return ONLY the optimized content (including frontmatter), nothing else:
                 success = self._update_metadata(file_path, content)
 
                 # Determine if backup was actually created (skipped for git repos)
-                backup_created = False if _is_in_git_repository(file_path) else success
+                backup_created = False if is_in_git_repository(file_path) else success
 
                 return {"status": "metadata_updated", "reason": reason, "method": "metadata_only", "ai_available": False, "backup_created": backup_created}
 

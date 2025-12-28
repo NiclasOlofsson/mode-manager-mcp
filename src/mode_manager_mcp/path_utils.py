@@ -8,9 +8,8 @@ and handling cross-platform path operations.
 import logging
 import os
 import platform
-import types
 from pathlib import Path
-from typing import Any, Optional
+from typing import Optional
 
 import psutil
 

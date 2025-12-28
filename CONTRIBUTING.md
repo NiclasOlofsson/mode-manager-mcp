@@ -57,7 +57,7 @@ uv run pydocstringformatter src tests && uv format
 uv format --check
 
 # Run type checking
-uv run mypy src tests
+uv run pyright src tests
 
 # Run all quality checks (pre-commit hooks)
 uv run pre-commit run --all-files
@@ -95,9 +95,8 @@ The project defines several convenient scripts in `pyproject.toml`:
 
 - `uv run pytest` - Run pytest
 - `uv format --check` - Check code formatting with Ruff (built-in)
-- `uv run mypy src tests` - Run mypy type checking  
+- `uv run pyright src tests` - Run pyright type checking  
 - `uv format` - Format code with Ruff (built-in)
-- `uv run pre-commit run --all-files` - Run pre-commit hooks
 
 ### Running Individual Commands
 
@@ -128,7 +127,7 @@ uv creates and manages a virtual environment (`.venv`) in your project directory
 | `uv run pytest` | Run all tests with pytest |
 | `uv format --check` | Check code formatting (Ruff) |
 | `uv format` | Auto-format code with Ruff |
-| `uv run mypy src tests` | Run mypy type checking |
+| `uv run pyright src tests` | Run pyright type checking |
 | `uv build` | Build wheel and source distribution |
 | `uv run` | Run commands in the project environment |
 | `uv sync` | Sync dependencies (creates .venv) |
@@ -166,10 +165,9 @@ uv creates and manages a virtual environment (`.venv`) in your project directory
 
 - **Bug fixes** - Check the issue tracker
 - **Documentation** - Improve existing docs or add new guides
-- **Features** - New chatmode/instruction management features
-- **Library expansion** - Add more chatmodes/instructions to the library
+- **Features** - New memory management features
 - **Testing** - Improve test coverage
-- **Performance** - Optimize file operations or network requests
+- **Performance** - Optimize file operations
 
 ## Code of Conduct
 

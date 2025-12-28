@@ -1,10 +1,8 @@
 import os
-from pathlib import Path
 
 import pytest
 from fastmcp import Client
 
-from mode_manager_mcp.path_utils import get_vscode_prompts_directory
 from mode_manager_mcp.simple_server import ModeManagerServer
 
 

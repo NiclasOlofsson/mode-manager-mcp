@@ -25,8 +25,7 @@ With Mode Manager MCP, you can:
 - **Workspace (Team) Memory:** Share best practices, onboarding notes, and team knowledge directly in the repo. New team members ramp up faster, and everyone stays on the same page.
 - **Language-Specific Memory:** Save and retrieve language-specific tips and conventions. Your assistant adapts to each language’s best practices automatically.
 - **Natural Language Simplicity:** Just say “remember…”—no config files, no YAML, no technical hurdles.
-- **Smarter Coding, Fewer Repeated Questions:** Your team’s memory grows over time, reducing repeated questions and ensuring consistent practices.
-
+- **Smarter Coding, Fewer Repeated Questions:** Your team’s memory grows over time, reducing repeated questions and ensuring consistent practices.- **AI-Powered Memory Optimization:** Automatically consolidate and organize your memories to keep them clean and efficient.
 &nbsp;  
 >&nbsp;  
 > **Before this tool**  
@@ -64,28 +63,61 @@ If it sounds like something you want remembered, it will be!
 
 ## Get It Running (2 Minutes)
 
-*If you don't even have `python`, you need to install that first. You can get it at [python.org/downloads](https://www.python.org/downloads/)*
+If you don't have Python installed, get it at [python.org/downloads](https://www.python.org/downloads/) - you'll need Python 3.10 or higher.
 
-### 1. Install pipx from PyPI
-```bash
-pip install pipx
+Don't have `uv` yet? Install it with: `pip install uv` or see [docs.astral.sh/uv](https://docs.astral.sh/uv/getting-started/installation/)
+
+### Option 1: One-Click Install (Easiest)
+
+Click the badge for your VS Code version:
+
+[![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Server-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=modemanager&config=%7B%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22mode-manager-mcp%22%5D%7D)
+[![Install in VS Code Insiders](https://img.shields.io/badge/VS_Code_Insiders-Install_Server-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=modemanager&config=%7B%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22mode-manager-mcp%22%5D%7D&quality=insiders)
+
+That's it! The server will automatically start when you open VS Code.
+
+### Option 2: Manual Configuration
+
+Add this to your `.vscode/mcp.json` or global `mcp.json` file:
+
+```json
+{
+  "servers": {
+    "mode-manager": {
+      "command": "uvx",
+      "args": ["mode-manager-mcp"]
+    }
+  }
+}
 ```
-### 2. Click on the badge for your VS Code
 
-[![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Server-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=modemanager&config=%7B%22command%22%3A%22pipx%22%2C%22args%22%3A%5B%22run%22%2C%22mode-manager-mcp%22%5D%7D)
-[![Install in VS Code Insiders](https://img.shields.io/badge/VS_Code_Insiders-Install_Server-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=modemanager&config=%7B%22command%22%3A%22pipx%22%2C%22args%22%3A%5B%22run%22%2C%22mode-manager-mcp%22%5D%7D&quality=insiders)
-
-### .. Or manually add it to your VS Code
-
-Add this to your VS Code MCP settings (`mcp.json`):
+Or if you prefer `pipx`:
 
 ```json
 {
   "servers": {
     "mode-manager": {
       "command": "pipx",
+      "args": ["run", "mode-manager-mcp"]
+    }
+  }
+}
+```
+
+### Option 3: Development / Testing (Latest from GitHub)
+
+For the impatient who want the latest features immediately:
+
+With `uvx`:
+
+```json
+{
+  "servers": {
+    "mode-manager": {
+      "command": "uvx",
       "args": [
-        "run",
+        "--from",
+        "git+https://github.com/NiclasOlofsson/mode-manager-mcp.git",
         "mode-manager-mcp"
       ]
     }
@@ -93,21 +125,7 @@ Add this to your VS Code MCP settings (`mcp.json`):
 }
 ```
 
-That's it! Start chatting with Copilot and use: *"Remember that..."*
-
-### Bonus ..
-
-As a convenience, you can run the following prompt in VS Code to get started in the best way:
-
->&nbsp;  
->You; */mcp.mode-manager.onboarding*  
->&nbsp;  
-
-This will guide you through the onboarding process, set up your persistent memory, and ensure Copilot knows your preferences from the start.
-
-### For the impatient (and brave) that can't wait for next release ..
-
-If you add this in to your `mcp.json` it will result in `pipx` download and install the latest directly from github, every time. Always bleeding edge .. 
+With `pipx`:
 
 ```json
 {
@@ -117,11 +135,45 @@ If you add this in to your `mcp.json` it will result in `pipx` download and inst
       "args": [
         "run",
         "--no-cache",
-        "--system-site-packages",
         "--spec",
         "git+https://github.com/NiclasOlofsson/mode-manager-mcp.git",
         "mode-manager-mcp"
       ]
+    }
+  }
+}
+```
+
+This downloads and installs directly from GitHub every time - always bleeding edge!
+
+### Bonus: Interactive Onboarding
+
+As a convenience, you can run the following prompt in VS Code to get started:
+
+>&nbsp;  
+>You: */mcp.mode-manager.onboarding*  
+>&nbsp;  
+
+This will guide you through the onboarding process, set up your persistent memory, and ensure Copilot knows your preferences from the start.
+
+### For Development / Testing Latest from GitHub
+
+To run the latest code directly from GitHub:
+
+```json
+{
+  "servers": {
+    "mode-manager": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--with",
+        "git+https://github.com/NiclasOlofsson/mode-manager-mcp.git",
+        "mode-manager-mcp"
+      ],
+      "env": {
+        "_RESTART": "1"
+      }
     }
   }
 }
@@ -180,39 +232,11 @@ MCP is flexible and understands a wide range of phrasing. You don’t have to sa
 making a personal note, a team guideline, or a language-specific tip, just say it 
 in your own words—Mode Manager MCP figures out what you want to remember and where it belongs.
 
-## Wait, There’s More: Power Prompts & Custom Modes
-
-Context prompting is critical for getting the best results from modern large language models like Copilot. As these models evolve and improve rapidly, so must the prompts and instructions we use with them. That’s why we built this functionality right into Mode Manager MCP—so you can always stay up to date, experiment with new approaches, and make sure your Copilot is as smart and helpful as possible.
->&nbsp;  
->**Want to see what’s available?**  
-> You: *Show me the list of available chatmodes from the library.*  
->
->**Ready to try one?**  
-> You: *Install the 'Beast Mode' chatmode from the library.*  
->&nbsp;  
-
-Memory is just the beginning—Mode Manager MCP also helps you manage your entire Copilot experience with powerful instructions and chatmodes.
-
-- **Instructions:**  
-  Memory is stored as instruction files, but you can create your own instructions for any purpose—personal reminders, team guidelines, or project-specific tips.
-
-- **Chatmodes:**  
-  Switch between different “modes” for Copilot, like “Beast Mode” for deep research and coding, or “Architect Mode” for big-picture thinking with attention to critical details. The right system prompt can transform your Copilot from a generic assistant into a true expert for your current task.
-
-- **Prompt Library & File Management:**  
-  Access a curated library of professional prompts, and easily create, edit, and organize your own `.chatmode.md` and `.instructions.md` files.
-
-
-A great Copilot experience isn’t just about memory—it’s about having the right context, the right instructions, and the right mode for every situation.
-
-You have full control over your instructions and chatmodes with easy CLRUD (Create, List, Read, Update, Delete) commands—so you can manage, organize, and evolve your prompts as your needs change. There’s a curated library of high-quality chatmodes and instructions to get you started or inspire your own customizations.
-
-One of the most powerful features is the ability to update your prompts and instructions directly from the online library. This keeps your setup in sync with the latest improvements, best practices, and new ideas—without losing your own custom tweaks. Stay up to date, collaborate with others, and always have the best Copilot experience possible.
-
-
 ## Contributing
 
-Want to help improve this tool? Check out [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines.
+Want to help make this better? The best contribution you can make is actually using it - your feedback and bug reports are what really drive improvements.
+
+Of course, code contributions are welcome too! Check out [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines. But seriously, just using it and telling us what works (or doesn't) is incredibly valuable.
 
 ## License
 

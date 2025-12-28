@@ -12,7 +12,6 @@ from fastmcp import FastMCP
 
 from .chatmode_manager import ChatModeManager
 from .instruction_manager import InstructionManager
-from .library_manager import LibraryManager
 
 
 class ServerRegistry:
@@ -33,7 +32,6 @@ class ServerRegistry:
             self._app: Optional[FastMCP] = None
             self._chatmode_manager: Optional[ChatModeManager] = None
             self._instruction_manager: Optional[InstructionManager] = None
-            self._library_manager: Optional[LibraryManager] = None
             self._read_only: bool = False
             ServerRegistry._initialized = True
 
@@ -42,14 +40,12 @@ class ServerRegistry:
         app: FastMCP,
         chatmode_manager: ChatModeManager,
         instruction_manager: InstructionManager,
-        library_manager: LibraryManager,
         read_only: bool = False,
     ) -> None:
         """Initialize the registry with server components."""
         self._app = app
         self._chatmode_manager = chatmode_manager
         self._instruction_manager = instruction_manager
-        self._library_manager = library_manager
         self._read_only = read_only
 
     @property
@@ -72,13 +68,6 @@ class ServerRegistry:
         if self._instruction_manager is None:
             raise RuntimeError("ServerRegistry not initialized. Call initialize() first.")
         return self._instruction_manager
-
-    @property
-    def library_manager(self) -> LibraryManager:
-        """Get the LibraryManager instance."""
-        if self._library_manager is None:
-            raise RuntimeError("ServerRegistry not initialized. Call initialize() first.")
-        return self._library_manager
 
     @property
     def read_only(self) -> bool:

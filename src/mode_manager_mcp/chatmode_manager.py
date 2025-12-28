@@ -5,7 +5,6 @@ This module handles chatmode files which define custom chat behaviors,
 tools, and instructions for VS Code Copilot.
 """
 
-import json
 import logging
 import urllib.error
 import urllib.request
