@@ -67,20 +67,20 @@ def register_memory_tools() -> None:
                 entries_after = result.get("entries_after", "unknown")
                 backup_created = result.get("backup_created", False)
 
-                message = f"✅ Memory optimization completed successfully!\n"
+                message = "✅ Memory optimization completed successfully!\n"
                 message += f"📊 Entries: {entries_before} → {entries_after}\n"
                 message += f"🔄 Method: {result.get('method', 'ai')}\n"
                 message += f"💾 Backup created: {'Yes' if backup_created else 'No'}\n"
                 message += f"📝 Reason: {result.get('reason', 'Manual optimization')}"
 
             elif status == "metadata_updated":
-                message = f"📝 Memory metadata updated (AI optimization unavailable)\n"
+                message = "📝 Memory metadata updated (AI optimization unavailable)\n"
                 message += f"💾 Backup created: {'Yes' if result.get('backup_created', False) else 'No'}\n"
                 message += f"📝 Reason: {result.get('reason', 'Manual optimization')}"
 
             elif status == "skipped":
                 message = f"⏭️ Optimization skipped: {result.get('reason', 'Unknown reason')}\n"
-                message += f"💡 Use force=True to optimize anyway"
+                message += "💡 Use force=True to optimize anyway"
 
             elif status == "error":
                 message = f"❌ Optimization failed: {result.get('reason', 'Unknown error')}"
@@ -135,20 +135,20 @@ def register_memory_tools() -> None:
                 return str(stats["error"])
 
             # Format stats message
-            message = f"📊 **Memory File Statistics**\n\n"
+            message = "📊 **Memory File Statistics**\n\n"
             message += f"📁 **File**: `{stats['file_path']}`\n"
             message += f"📏 **Size**: {stats['file_size_bytes']:,} bytes\n"
             message += f"📝 **Entries**: {stats['current_entries']}\n"
             message += f"🔄 **Last Optimized**: {stats['last_optimized'] or 'Never'}\n"
             message += f"⚡ **Optimization Version**: {stats['optimization_version']}\n\n"
 
-            message += f"⚙️ **Configuration**:\n"
+            message += "⚙️ **Configuration**:\n"
             message += f"• Auto-optimize: {'✅ Enabled' if stats['auto_optimize_enabled'] else '❌ Disabled'}\n"
             message += f"• Size threshold: {stats['size_threshold']:,} bytes\n"
             message += f"• Entry threshold: {stats['entry_threshold']} new entries\n"
             message += f"• Time threshold: {stats['time_threshold_days']} days\n\n"
 
-            message += f"🎯 **Optimization Status**:\n"
+            message += "🎯 **Optimization Status**:\n"
             message += f"• Eligible: {'✅ Yes' if stats['optimization_eligible'] else '❌ No'}\n"
             message += f"• Reason: {stats['optimization_reason']}\n"
             message += f"• New entries since last optimization: {stats['entries_since_last_optimization']}"
@@ -236,7 +236,7 @@ def register_memory_tools() -> None:
                 message = "✅ Memory optimization settings updated:\n"
                 for setting in updated_settings:
                     message += f"• {setting}\n"
-                message += f"\n💾 Backup created for safety"
+                message += "\n💾 Backup created for safety"
                 return message
             else:
                 return "❌ Failed to update memory optimization settings"

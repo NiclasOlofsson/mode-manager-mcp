@@ -50,8 +50,11 @@ uv run pytest --cov
 ### Code Quality
 
 ```bash
-# Format code with Ruff (via uv format)
-uv run pydocstringformatter src tests && uv format
+# Lint code with Ruff
+uv run ruff check src tests
+
+# Format code with Ruff
+uv format
 
 # Check formatting without applying
 uv format --check
@@ -94,6 +97,7 @@ source .venv/bin/activate  # bash
 The project defines several convenient scripts in `pyproject.toml`:
 
 - `uv run pytest` - Run pytest
+- `uv run ruff check src tests` - Lint code with Ruff
 - `uv format --check` - Check code formatting with Ruff (built-in)
 - `uv run pyright src tests` - Run pyright type checking  
 - `uv format` - Format code with Ruff (built-in)
@@ -125,6 +129,7 @@ uv creates and manages a virtual environment (`.venv`) in your project directory
 | Command | Description |
 |---------|-------------|
 | `uv run pytest` | Run all tests with pytest |
+| `uv run ruff check src tests` | Lint code with Ruff |
 | `uv format --check` | Check code formatting (Ruff) |
 | `uv format` | Auto-format code with Ruff |
 | `uv run pyright src tests` | Run pyright type checking |

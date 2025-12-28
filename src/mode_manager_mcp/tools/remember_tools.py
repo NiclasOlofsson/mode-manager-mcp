@@ -88,7 +88,6 @@ def register_remember_tools() -> None:
     """Register memory and remember tools with the server."""
     registry = get_server_registry()
     app = registry.app
-    instruction_manager = registry.instruction_manager
     read_only = registry.read_only
 
     @app.tool(

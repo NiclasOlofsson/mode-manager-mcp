@@ -19,22 +19,32 @@ jobs:
         with:
           python-version: '3.11'
       - uses: astral-sh/setup-uv@v4
+      - name: Sync dependencies
+        run: uv sync --group dev
       - name: Bump version (patch)
         id: version_bump
         run: |
-          uv version --bump patch
+          # Get current version from pyproject.toml
+          CURRENT_VERSION=$(grep -oP '^version = "\K[^"]+' pyproject.toml | head -1)
+          # Bump patch version
+          NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+          # Update pyproject.toml
+          sed -i "s/version = \"$CURRENT_VERSION\"/version = \"$NEW_VERSION\"/" pyproject.toml
+          # Commit and tag
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add pyproject.toml uv.lock || true
-          git commit -m "ci: bump version [skip ci]" || echo "No changes to commit"
-          git tag v$(uv version --short)
+          git add pyproject.toml
+          git commit -m "ci: bump version to $NEW_VERSION [skip ci]" || echo "No changes to commit"
+          git tag v$NEW_VERSION
           git pull --rebase || true
           git push --follow-tags
       - name: Build package
         run: uv build --no-sources
+      - name: Format check
+        run: uv run ruff format --check src tests
+      - name: Type check
+        run: uv run pyright src tests
       - name: Test
-        run: |
-          uv sync --group dev
-          uv run pytest
+        run: uv run pytest
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
