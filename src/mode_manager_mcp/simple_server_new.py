@@ -1,8 +1,8 @@
 """
 Mode Manager MCP Server Implementation.
 
-This server provides tools for managing VS Code .chatmode.md and .instructions.md files
-which define custom instructions and tools for GitHub Copilot.
+This server provides tools for managing VS Code .instructions.md files
+which define custom instructions for GitHub Copilot.
 """
 
 import logging
@@ -15,7 +15,6 @@ from fastmcp.server.middleware.logging import LoggingMiddleware
 from fastmcp.server.middleware.rate_limiting import RateLimitingMiddleware
 from fastmcp.server.middleware.timing import TimingMiddleware
 
-from .chatmode_manager import ChatModeManager
 from .instruction_manager import InstructionManager
 from .server_registry import ServerRegistry
 from .tools import register_all_tools
@@ -27,7 +26,7 @@ class ModeManagerServer:
     """
     Mode Manager MCP Server.
 
-    Provides tools for managing VS Code .chatmode.md and .instructions.md files.
+    Provides tools for managing VS Code .instructions.md files.
     """
 
     def __init__(self, prompts_dir: Optional[str] = None):
@@ -59,7 +58,7 @@ class ModeManagerServer:
             - Always loaded: VS Code includes your memories in every chat request.
 
             Additional Capabilities:
-            - Manage and organize .chatmode.md and .instructions.md files.
+            - Manage and organize .instructions.md files.
             - AI-powered memory optimization to consolidate and organize your memories.
 
             Usage Example:
@@ -70,7 +69,6 @@ class ModeManagerServer:
             on_duplicate_prompts="replace",
             include_fastmcp_meta=True,  # Include FastMCP metadata for clients
         )
-        self.chatmode_manager = ChatModeManager(prompts_dir=prompts_dir)
         self.instruction_manager = InstructionManager(prompts_dir=prompts_dir)
 
         self.read_only = os.getenv("MCP_CHATMODE_READ_ONLY", "false").lower() == "true"
@@ -85,7 +83,6 @@ class ModeManagerServer:
         registry = ServerRegistry.get_instance()
         registry.initialize(
             app=self.app,
-            chatmode_manager=self.chatmode_manager,
             instruction_manager=self.instruction_manager,
             read_only=self.read_only,
         )

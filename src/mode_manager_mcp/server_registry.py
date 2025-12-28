@@ -10,7 +10,6 @@ from typing import Optional
 
 from fastmcp import FastMCP
 
-from .chatmode_manager import ChatModeManager
 from .instruction_manager import InstructionManager
 
 
@@ -30,7 +29,6 @@ class ServerRegistry:
         """Initialize the server registry (only once)."""
         if not ServerRegistry._initialized:
             self._app: Optional[FastMCP] = None
-            self._chatmode_manager: Optional[ChatModeManager] = None
             self._instruction_manager: Optional[InstructionManager] = None
             self._read_only: bool = False
             ServerRegistry._initialized = True
@@ -38,13 +36,11 @@ class ServerRegistry:
     def initialize(
         self,
         app: FastMCP,
-        chatmode_manager: ChatModeManager,
         instruction_manager: InstructionManager,
         read_only: bool = False,
     ) -> None:
         """Initialize the registry with server components."""
         self._app = app
-        self._chatmode_manager = chatmode_manager
         self._instruction_manager = instruction_manager
         self._read_only = read_only
 
@@ -54,13 +50,6 @@ class ServerRegistry:
         if self._app is None:
             raise RuntimeError("ServerRegistry not initialized. Call initialize() first.")
         return self._app
-
-    @property
-    def chatmode_manager(self) -> ChatModeManager:
-        """Get the ChatModeManager instance."""
-        if self._chatmode_manager is None:
-            raise RuntimeError("ServerRegistry not initialized. Call initialize() first.")
-        return self._chatmode_manager
 
     @property
     def instruction_manager(self) -> InstructionManager:

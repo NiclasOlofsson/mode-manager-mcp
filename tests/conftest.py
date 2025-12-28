@@ -16,7 +16,6 @@ def global_patch_and_tempdir() -> Generator[str, None, None]:
     os.makedirs(mock_workspace_dir, exist_ok=True)
 
     os.environ["MCP_PROMPTS_DIRECTORY"] = prompts_dir
-    os.environ["MCP_CHATMODE_READ_ONLY"] = "false"
 
     # Patch globally for all tests
     vscode_patcher = patch(

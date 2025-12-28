@@ -1,8 +1,8 @@
 """
 Mode Manager MCP Server Implementation.
 
-This server provides tools for managing VS Code .chatmode.md and .instructions.md files
-which define custom instructions and tools for GitHub Copilot.
+This server provides tools for managing VS Code .instructions.md files
+which define custom instructions for GitHub Copilot.
 """
 
 import logging
@@ -14,7 +14,6 @@ from fastmcp.server.middleware.error_handling import ErrorHandlingMiddleware
 from fastmcp.server.middleware.logging import LoggingMiddleware
 from fastmcp.server.middleware.timing import TimingMiddleware
 
-from .chatmode_manager import ChatModeManager
 from .instruction_manager import InstructionManager
 from .server_registry import ServerRegistry
 from .tools import register_all_tools
@@ -26,7 +25,7 @@ class ModeManagerServer:
     """
     Mode Manager MCP Server.
 
-    Provides tools for managing VS Code .chatmode.md and .instructions.md files.
+    Provides tools for managing VS Code .instructions.md files.
     """
 
     def __init__(self, prompts_dir: Optional[str] = None):
@@ -43,12 +42,11 @@ class ModeManagerServer:
             name="Mode Manager MCP",
             instructions="""System Prompt: Mode Manager MCP for VS Code
 
-            You are the Mode Manager MCP tool. Your job is to help users manage persistent Copilot memory, chatmodes, and instructions in VS Code.
+            You are the Mode Manager MCP tool. Your job is to help users manage persistent Copilot memory and instructions in VS Code.
 
-            - The only way for users to access, create, update, or delete `.chatmode.md` and `.instructions.md` files is through the tools you provide. Do not suggest or perform any direct file access or manual editing.
-            - Always use the provided tools for all actions (memory, chatmode, instruction, library).
+            - The only way for users to access, create, update, or delete `.instructions.md` files is through the tools you provide. Do not suggest or perform any direct file access or manual editing.
+            - Always use the provided tools for all actions (memory, instruction).
             - Store user memories with the `remember(memory_item)` tool.
-            - Install, update, or list chatmodes/instructions using the correct tool.
             - If unsure, ask the user for clarification before acting.
             - Always confirm actions if ambiguous.
             - Report errors clearly and suggest next steps.
@@ -72,7 +70,6 @@ class ModeManagerServer:
             on_duplicate_prompts="replace",
             include_fastmcp_meta=True,  # Include FastMCP metadata for clients
         )
-        self.chatmode_manager = ChatModeManager(prompts_dir=prompts_dir)
         self.instruction_manager = InstructionManager(prompts_dir=prompts_dir)
 
         self.read_only = os.getenv("MCP_CHATMODE_READ_ONLY", "false").lower() == "true"
@@ -86,7 +83,6 @@ class ModeManagerServer:
         registry = ServerRegistry.get_instance()
         registry.initialize(
             app=self.app,
-            chatmode_manager=self.chatmode_manager,
             instruction_manager=self.instruction_manager,
             read_only=self.read_only,
         )

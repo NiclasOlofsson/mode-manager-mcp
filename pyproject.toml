@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 [project]
 name = "mode-manager-mcp"
 version = "0.2.0"
-description = "Mode Manager MCP: Server for managing VS Code .chatmode.md and .instructions.md files (GitHub Copilot prompts)"
+description = "Mode Manager MCP: Server for managing VS Code .instructions.md files (GitHub Copilot persistent memory)"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
@@ -14,11 +14,11 @@ authors = [{ name = "Niclas Olofsson", email = "nicke.olofsson@gmail.com" }]
 keywords = [
     "mcp",
     "vscode",
-    "chatmode",
     "instruction",
     "github-copilot",
     "prompts",
     "mode-manager",
+    "memory",
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
