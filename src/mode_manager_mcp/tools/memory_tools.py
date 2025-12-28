@@ -138,15 +138,16 @@ def register_memory_tools() -> None:
             message = "📊 **Memory File Statistics**\n\n"
             message += f"📁 **File**: `{stats['file_path']}`\n"
             message += f"📏 **Size**: {stats['file_size_bytes']:,} bytes\n"
+            message += f"🎯 **Tokens**: {stats['current_tokens']:,} (Last optimized: {stats['last_optimized_tokens']:,})\n"
+            message += f"📈 **Growth**: {stats['token_growth_percent']}% since last optimization\n"
             message += f"📝 **Entries**: {stats['current_entries']}\n"
             message += f"🔄 **Last Optimized**: {stats['last_optimized'] or 'Never'}\n"
             message += f"⚡ **Optimization Version**: {stats['optimization_version']}\n\n"
 
             message += "⚙️ **Configuration**:\n"
             message += f"• Auto-optimize: {'✅ Enabled' if stats['auto_optimize_enabled'] else '❌ Disabled'}\n"
-            message += f"• Size threshold: {stats['size_threshold']:,} bytes\n"
-            message += f"• Entry threshold: {stats['entry_threshold']} new entries\n"
-            message += f"• Time threshold: {stats['time_threshold_days']} days\n\n"
+            threshold_percent = int((stats["token_growth_threshold"] - 1.0) * 100)
+            message += f"• Token growth threshold: {threshold_percent}% ({stats['token_growth_threshold']})\n\n"
 
             message += "🎯 **Optimization Status**:\n"
             message += f"• Eligible: {'✅ Yes' if stats['optimization_eligible'] else '❌ No'}\n"
@@ -169,9 +170,7 @@ def register_memory_tools() -> None:
             "parameters": {
                 "memory_file": "Optional path to specific memory file. If not provided, will configure the user's main memory file.",
                 "auto_optimize": "Enable or disable automatic optimization. True/False.",
-                "size_threshold": "File size threshold in bytes for triggering optimization.",
-                "entry_threshold": "Number of new entries to trigger optimization.",
-                "time_threshold_days": "Number of days between optimizations.",
+                "token_growth_threshold": "Token growth multiplier for triggering optimization (e.g., 1.20 = 20% growth). Must be >= 1.0.",
             },
             "returns": "Returns confirmation of updated settings.",
         },
@@ -182,9 +181,7 @@ def register_memory_tools() -> None:
     def configure_memory_optimization(
         memory_file: Annotated[Optional[str], "Path to memory file to configure"] = None,
         auto_optimize: Annotated[Optional[bool], "Enable/disable auto-optimization"] = None,
-        size_threshold: Annotated[Optional[int], "Size threshold in bytes"] = None,
-        entry_threshold: Annotated[Optional[int], "Entry count threshold"] = None,
-        time_threshold_days: Annotated[Optional[int], "Time threshold in days"] = None,
+        token_growth_threshold: Annotated[Optional[float], "Token growth threshold (e.g., 1.20 = 20% growth)"] = None,
     ) -> str:
         """Configure memory optimization settings."""
         if read_only:
@@ -214,20 +211,22 @@ def register_memory_tools() -> None:
                 frontmatter["autoOptimize"] = auto_optimize
                 updated_settings.append(f"auto_optimize: {auto_optimize}")
 
-            if size_threshold is not None:
-                frontmatter["sizeThreshold"] = size_threshold
-                updated_settings.append(f"size_threshold: {size_threshold:,} bytes")
+            if token_growth_threshold is not None:
+                if token_growth_threshold < 1.0:
+                    return "Error: token_growth_threshold must be >= 1.0 (e.g., 1.20 = 20% growth)"
+                frontmatter["tokenGrowthThreshold"] = token_growth_threshold
+                growth_percent = int((token_growth_threshold - 1.0) * 100)
+                updated_settings.append(f"token_growth_threshold: {token_growth_threshold} ({growth_percent}% growth)")
 
-            if entry_threshold is not None:
-                frontmatter["entryThreshold"] = entry_threshold
-                updated_settings.append(f"entry_threshold: {entry_threshold}")
+            # Remove deprecated fields if they exist
+            deprecated_removed = []
+            for old_field in ["sizeThreshold", "entryThreshold", "timeThreshold"]:
+                if old_field in frontmatter:
+                    frontmatter.pop(old_field)
+                    deprecated_removed.append(old_field)
 
-            if time_threshold_days is not None:
-                frontmatter["timeThreshold"] = time_threshold_days
-                updated_settings.append(f"time_threshold: {time_threshold_days} days")
-
-            if not updated_settings:
-                return "No settings provided to update. Available options: auto_optimize, size_threshold, entry_threshold, time_threshold_days"
+            if not updated_settings and not deprecated_removed:
+                return "No settings provided to update. Available options: auto_optimize, token_growth_threshold"
 
             # Write updated frontmatter
             success = write_frontmatter_file(file_path, frontmatter, content, create_backup=True)
@@ -236,6 +235,8 @@ def register_memory_tools() -> None:
                 message = "✅ Memory optimization settings updated:\n"
                 for setting in updated_settings:
                     message += f"• {setting}\n"
+                if deprecated_removed:
+                    message += "\n🧹 Removed deprecated settings: " + ", ".join(deprecated_removed) + "\n"
                 message += "\n💾 Backup created for safety"
                 return message
             else:
