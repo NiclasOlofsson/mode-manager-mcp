@@ -55,7 +55,9 @@ def parse_arguments() -> argparse.Namespace:
         help="Run server in read-only mode (no write operations)",
     )
 
-    parser.add_argument("--version", action="version", version="%(prog)s 0.2.0")
+    from . import __version__
+
+    parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
 
     return parser.parse_args()
 
