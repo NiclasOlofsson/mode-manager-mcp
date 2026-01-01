@@ -45,9 +45,8 @@ class MemoryOptimizer:
                 "entryCount": frontmatter.get("entryCount", 0),
                 "optimizationVersion": frontmatter.get("optimizationVersion", 0),
                 "autoOptimize": frontmatter.get("autoOptimize", True),  # Default to enabled
-                "sizeThreshold": frontmatter.get("sizeThreshold", 50000),  # 50KB
-                "entryThreshold": frontmatter.get("entryThreshold", 20),  # 20 entries
-                "timeThreshold": frontmatter.get("timeThreshold", 7),  # 7 days
+                "lastOptimizedTokenCount": frontmatter.get("lastOptimizedTokenCount", 0),  # Critical for token growth check
+                "tokenGrowthThreshold": frontmatter.get("tokenGrowthThreshold", 1.20),  # Default 20% growth
             }
 
             return metadata
@@ -60,9 +59,8 @@ class MemoryOptimizer:
                 "entryCount": 0,
                 "optimizationVersion": 0,
                 "autoOptimize": True,
-                "sizeThreshold": 50000,
-                "entryThreshold": 20,
-                "timeThreshold": 7,
+                "lastOptimizedTokenCount": 0,
+                "tokenGrowthThreshold": 1.20,
             }
 
     def _count_memory_entries(self, content: str) -> int:
